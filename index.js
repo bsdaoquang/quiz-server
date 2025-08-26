@@ -3,14 +3,14 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { dbConnect } from './src/dbConfig.js';
+import questionRouter from './src/routers/question.js';
 
 dotenv.config();
 
 const app = express();
 
-app.get('/', (req, res) => {
-	res.send('Hello World!');
-});
+app.use(express.json());
+app.use('/questions', questionRouter);
 
 dbConnect()
 	.then(() => {

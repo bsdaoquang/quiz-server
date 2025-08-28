@@ -7,6 +7,8 @@ import questionRouter from './src/routers/question.js';
 
 dotenv.config();
 
+const PORT = process.env.PORT || 3001;
+
 const app = express();
 
 app.use(express.json());
@@ -14,11 +16,11 @@ app.use('/questions', questionRouter);
 
 dbConnect()
 	.then(() => {
-		app.listen(3000, (error) => {
+		app.listen(PORT, (error) => {
 			if (error) {
 				console.error('Error starting server:', error);
 			} else {
-				console.log('Server is running on port http://localhost:3000');
+				console.log(`Server is running on port http://localhost:${PORT}`);
 			}
 		});
 	})

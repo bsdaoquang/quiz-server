@@ -4,7 +4,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { dbConnect } from './src/dbConfig.js';
 import questionRouter from './src/routers/question.js';
-import userRouter from './src/routers/userRouter.js';
+import userRouter from './src/routers/user.js';
 
 dotenv.config();
 

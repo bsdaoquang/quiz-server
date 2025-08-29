@@ -1,61 +1,56 @@
 /** @format */
 
-/*
-  Role:
-    user: là người dùng vào làm bài thi, có thể xem lại kết quả bài thi của mình, lưu lịch sử làm bài thi... 
-    customer: là người tạo và quản lý các câu hỏi, có thể xem thống kê kết quả làm bài thi của tất cả users
-    admin: là người quản lý toàn bộ hệ thống, có thể thêm, sửa, xóa người dùng và câu hỏi
-*/
-
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema(
+/**
+ * User model for MongoDB
+ *   _id: ObjectId
+ *   email: String not required
+ *   username: String required
+ *   password: String required
+ *   name: String required
+ *   age: Number required
+ *   refreshToken: String
+ *   role: admin | teacher | student default: teacher
+ *     admin: has full access
+ *     teacher: can create and manage quizzes, questions
+ *     student: can take quizzes
+ *
+ * @format
+ */
+
+const UserSchema = new mongoose.Schema(
 	{
-		username: {
-			type: String,
-			required: true,
-			unique: true,
-			trim: true,
-			minlength: 3,
-		},
 		email: {
 			type: String,
 			trim: true,
 			lowercase: true,
 		},
+		username: {
+			type: String,
+			required: true,
+			unique: true,
+			trim: true,
+		},
 		password: {
 			type: String,
 			required: true,
-			minlength: 6,
 		},
-		// user: làm bài thi, xem lại kết quả, lưu lịch sử
-		// customer: tạo/quản lý câu hỏi, xem thống kê kết quả users
-		// admin: quản lý hệ thống, thêm/sửa/xóa user & câu hỏi
+		name: {
+			type: String,
+			trim: true,
+		},
+		age: {
+			type: Number,
+			min: 0,
+		},
+		refreshToken: {
+			type: String,
+		},
 		role: {
 			type: String,
-			enum: ['user', 'customer', 'admin'],
-			default: 'user',
-		},
-	},
-	{
-		timestamps: true,
-	}
-);
-
-const historySchema = new mongoose.Schema(
-	{
-		userId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
-		},
-		quizId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Quiz',
-			required: true,
-		},
-		score: {
-			type: Number,
+			enum: ['admin', 'teacher', 'student'],
+			default: 'teacher',
 			required: true,
 		},
 	},
@@ -64,9 +59,6 @@ const historySchema = new mongoose.Schema(
 	}
 );
 
-const UserModel = mongoose.model('User', userSchema);
-const HistoryModel = mongoose.model('History', historySchema);
+const UserModel = mongoose.model('User', UserSchema);
 
 export default UserModel;
-
-export { HistoryModel };

@@ -12,6 +12,7 @@ const getAllQuestions = async (req, res) => {
 };
 
 const getQuestionById = async (req, res) => {
+	console.log(req);
 	try {
 		const question = await QuestionModel.findById(req.params.id);
 		if (!question) {

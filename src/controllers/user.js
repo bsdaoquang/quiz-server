@@ -7,9 +7,13 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 const generateAccessToken = (user, exp) => {
-	return jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, {
-		expiresIn: exp,
-	});
+	return jwt.sign(
+		{ id: user._id, username: user.username, role: user.role },
+		JWT_SECRET,
+		{
+			expiresIn: exp,
+		}
+	);
 };
 
 // Register

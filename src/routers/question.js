@@ -3,17 +3,23 @@
 import { Router } from 'express';
 import {
 	createQuestion,
+	deleteQuestion,
 	getAllQuestions,
 	getQuestionById,
 	updateQuestion,
-	deleteQuestion,
 } from '../controllers/questions.js';
+import { verifyAccessToken } from '../middlewares/authorization.js';
+import { verifyTeacher } from '../middlewares/verifyTeacher.js';
 
 const router = Router();
 
-router.post('/', createQuestion);
 router.get('/', getAllQuestions);
 router.get('/:id', getQuestionById);
+
+router.use(verifyAccessToken);
+router.use(verifyTeacher);
+
+router.post('/', createQuestion);
 router.put('/:id', updateQuestion);
 router.delete('/:id', deleteQuestion);
 

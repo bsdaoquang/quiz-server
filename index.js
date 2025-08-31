@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { dbConnect } from './src/dbConfig.js';
 import questionRouter from './src/routers/question.js';
 import userRouter from './src/routers/user.js';
+import { verifyAccessToken } from './src/middlewares/authorization.js';
 
 dotenv.config();
 
@@ -13,8 +14,8 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.json());
-app.use('/questions', questionRouter);
 app.use('/users', userRouter);
+app.use('/questions', questionRouter);
 
 dbConnect()
 	.then(() => {

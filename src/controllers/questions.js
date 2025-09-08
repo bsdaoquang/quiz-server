@@ -1,71 +1,47 @@
 /** @format */
 
 import QuestionModel from '../models/QuestionModel.js';
+import asyncHandle from 'express-async-handler';
+import { AppError } from '../../errors.js';
 
-const getAllQuestions = async (req, res) => {
-	try {
-		const questions = await QuestionModel.find();
-		res.status(200).json({ status: 200, data: questions });
-	} catch (err) {
-		res.status(500).json({ status: 500, error: err.message });
+const getAllQuestions = asyncHandle(async (req, res) => {
+	const questions = await QuestionModel.find();
+	res.status(200).json({ data: questions });
+});
+
+const getQuestionById = asyncHandle(async (req, res) => {
+	const question = await QuestionModel.findById(req.params.id);
+	if (!question) {
+		throw new AppError('Question not found', 404);
 	}
-};
+	res.status(200).json({ data: question });
+});
 
-const getQuestionById = async (req, res) => {
-	console.log(req);
-	try {
-		const question = await QuestionModel.findById(req.params.id);
-		if (!question) {
-			return res.status(404).json({ status: 404, error: 'Question not found' });
-		}
-		res.status(200).json({ status: 200, data: question });
-	} catch (err) {
-		res.status(500).json({ status: 500, error: err.message });
+const createQuestion = asyncHandle(async (req, res) => {
+	const newQuestion = new QuestionModel(req.body);
+	const savedQuestion = await newQuestion.save();
+	res.status(201).json({ data: savedQuestion });
+});
+
+const updateQuestion = asyncHandle(async (req, res) => {
+	const updatedQuestion = await QuestionModel.findByIdAndUpdate(
+		req.params.id,
+		req.body,
+		{ new: true, runValidators: true }
+	);
+	if (!updatedQuestion) {
+		throw new AppError('Question not found', 404);
 	}
-};
+	res.status(200).json({ data: updatedQuestion });
+});
 
-const createQuestion = async (req, res) => {
-	try {
-		const newQuestion = new QuestionModel(req.body);
-		const savedQuestion = await newQuestion.save();
-
-		res.status(201).json({ status: 201, data: savedQuestion });
-	} catch (err) {
-		res.status(400).json({ status: 400, error: err.message });
+const deleteQuestion = asyncHandle(async (req, res) => {
+	const deletedQuestion = await QuestionModel.findByIdAndDelete(req.params.id);
+	if (!deletedQuestion) {
+		throw new AppError('Question not found', 404);
 	}
-};
-
-const updateQuestion = async (req, res) => {
-	try {
-		const updatedQuestion = await QuestionModel.findByIdAndUpdate(
-			req.params.id,
-			req.body,
-			{ new: true, runValidators: true }
-		);
-		if (!updatedQuestion) {
-			return res.status(404).json({ status: 404, error: 'Question not found' });
-		}
-		res.status(200).json({ status: 200, data: updatedQuestion });
-	} catch (err) {
-		res.status(400).json({ status: 400, error: err.message });
-	}
-};
-
-const deleteQuestion = async (req, res) => {
-	try {
-		const deletedQuestion = await QuestionModel.findByIdAndDelete(
-			req.params.id
-		);
-		if (!deletedQuestion) {
-			return res.status(404).json({ status: 404, error: 'Question not found' });
-		}
-		res
-			.status(200)
-			.json({ status: 200, message: 'Question deleted successfully' });
-	} catch (err) {
-		res.status(500).json({ status: 500, error: err.message });
-	}
-};
+	res.status(200).json({ message: 'Question deleted successfully' });
+});
 
 export {
 	getAllQuestions,

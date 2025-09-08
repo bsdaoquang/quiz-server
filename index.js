@@ -1,11 +1,11 @@
 /** @format */
 
-import express from 'express';
 import dotenv from 'dotenv';
+import express from 'express';
 import { dbConnect } from './src/dbConfig.js';
+import { errorHandle } from './src/middlewares/errorHandle.js';
 import questionRouter from './src/routers/question.js';
 import userRouter from './src/routers/user.js';
-import { verifyAccessToken } from './src/middlewares/authorization.js';
 
 dotenv.config();
 
@@ -16,6 +16,8 @@ const app = express();
 app.use(express.json());
 app.use('/users', userRouter);
 app.use('/questions', questionRouter);
+
+app.use(errorHandle);
 
 dbConnect()
 	.then(() => {

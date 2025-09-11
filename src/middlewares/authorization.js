@@ -12,7 +12,6 @@ const verifyAccessToken = (req, res, next) => {
 
 	jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
 		if (err) {
-			// auto refresh token at here
 			return res
 				.status(403)
 				.json({ message: 'Invalid or expired access token' });

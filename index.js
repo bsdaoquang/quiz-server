@@ -6,6 +6,7 @@ import { dbConnect } from './src/dbConfig.js';
 import { errorHandle } from './src/middlewares/errorHandle.js';
 import questionRouter from './src/routers/question.js';
 import userRouter from './src/routers/user.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use('/users', userRouter);
 app.use('/questions', questionRouter);

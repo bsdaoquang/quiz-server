@@ -7,7 +7,7 @@
 		"start": "node index.js",
 		"dev": "nodemon index.js"
 	},
-	"module": "commonjs",
+	"type": "module",
 	"keywords": [],
 	"author": "",
 	"license": "ISC",

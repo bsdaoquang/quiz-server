@@ -13,10 +13,7 @@ import {
 const router = Router();
 
 router.post('/', createProfessor);
+router.put('/:id', updateProfessor);
 router.post('/login', loginProfessor);
-// router.get('/', getProfessors);
-// router.get('/:id', getProfessorById);
-// router.put('/:id', updateProfessor);
-// router.delete('/:id', deleteProfessor);
 
 export default router;

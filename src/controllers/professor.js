@@ -49,6 +49,19 @@ const createProfessor = asyncHandle(async (req, res) => {
 });
 
 // login professor with username and password
+
+/*
+
+login f2a flow
+- step 1: user submits username and password
+- step 2: if f2a is enabled
+	- if have email, send code to email
+	- else throw error -> client require update email
+- step 3: if f2a is not enabled and have email, generate code and send to email, hash code and save to user
+- step 4: verify code like password
+- step 5: if code is valid, login success
+- step 6: if code is invalid, throw error
+*/
 const loginProfessor = asyncHandle(async (req, res) => {
 	const { username, password } = req.body;
 
@@ -95,7 +108,7 @@ const getProfessorById = asyncHandle(async (req, res) => {
 
 const updateProfessor = asyncHandle(async (req, res) => {
 	const data = req.body;
-	const { name, email, department } = data;
+	const { email } = data;
 	const professor = await ProfessorModel.findById(req.params.id);
 	if (!professor) {
 		throw new AppError('Professor not found', 404);

@@ -36,6 +36,14 @@ const UserSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		isF2AEnabled: {
+			type: Boolean,
+			default: false,
+		},
+		verificationCode: {
+			type: String, // hash of 6 number login code
+			default: null,
+		},
 		name: {
 			type: String,
 			trim: true,

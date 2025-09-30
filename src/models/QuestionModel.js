@@ -1,42 +1,41 @@
 /** @format */
 import mongoose from 'mongoose';
 
-/**
- * question model:
- *    - content
- *    - options : string[]
- *    - answer : string,
- *    - category_id: string,
- *    - imageUrl?: string
- *    - reason: string
- *
- * example:
- * 1 + 1 = ?
- * 2
- * 3
- * 4
- * 5
- * 6
- *
- * 2
- *
- * @format
+/* Question Schema
+- question: String
+- options: [String]
+- correctAnswer: String
+- categories: [String]
+- note: String
+- photoUrl: String 
  */
 
-const QuestionSchema = new mongoose.Schema(
+/* Example Question Document:
+{
+	question: "What is the capital of France?",
+	options: ["Paris", "London", "Berlin", "Madrid"],
+	correctAnswer: "Paris",
+	categories: ["Geography", "Europe"],
+	note: "Paris is the largest city in France.",
+	photoUrl: "https://example.com/paris.jpg"
+}
+*/
+
+const questionScheme = new mongoose.Schema(
 	{
-		content: { type: String, required: true },
+		question: { type: String, required: true },
+		slug: { type: String, required: true }, // for search
 		options: { type: [String], required: true },
-		answer: { type: String, required: true },
-		chap_id: { type: String, required: true },
-		imageUrl: { type: String },
-		reason: { type: String, default: '' },
+		correctAnswer: { type: String, required: true },
+		categories: { type: [String] },
+		note: { type: String },
+		photoUrl: { type: String },
+		createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // reference to User model, created to remove
 	},
 	{
 		timestamps: true,
 	}
 );
 
-const QuestionModel = mongoose.model('Question', QuestionSchema);
-
+const QuestionModel = mongoose.model('Question', questionScheme);
 export default QuestionModel;

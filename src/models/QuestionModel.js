@@ -37,5 +37,19 @@ const questionScheme = new mongoose.Schema(
 	}
 );
 
+const categoryScheme = new mongoose.Schema(
+	{
+		name: { type: String, required: true },
+		description: { type: String },
+		slug: { type: String, required: true, unique: true }, // for search, if duplicate, add number at the end
+	},
+	{
+		timestamps: true,
+	}
+);
+
 const QuestionModel = mongoose.model('Question', questionScheme);
+const CategoryModel = mongoose.model('Category', categoryScheme);
 export default QuestionModel;
+
+export { CategoryModel };

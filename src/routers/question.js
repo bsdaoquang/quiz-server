@@ -8,9 +8,14 @@ import {
 	deleteQuestions,
 	getQuestions,
 } from '../controllers/questions.js';
+import { handleCategory, getCategories } from '../controllers/categories.js';
 import { verifyAccessToken } from '../middlewares/authorization.js';
 
 const router = Router();
+
+router.get('/categories', getCategories);
+router.post('/category', handleCategory);
+
 router.use(verifyAccessToken);
 router.use(verifyTeacher);
 

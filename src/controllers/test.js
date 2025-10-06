@@ -4,17 +4,38 @@ import TestModel from '../models/TestModel.js';
 import asyncHandler from 'express-async-handler';
 
 // CRUD tests
-const createTest = asyncHandler(async (req, res) => {
-	const { title, categoryId, userId, questions } = req.body;
-	const test = await TestModel.create({ title, categoryId, userId, questions });
-	res.status(201).json(test);
-});
+const createTest = async (req, res) => {
+	const data = req.body;
+	const { _id } = data;
+
+	try {
+		if (_id) {
+			await TestModel.findByIdAndUpdate(_id, data, { new: true });
+
+			const newData = await TestModel.findById(_id);
+			return res
+				.status(200)
+				.json({ message: 'Test updated successfully', data: newData });
+		}
+
+		delete data._id; // remove id field if exists
+
+		const newTest = new TestModel(data);
+		await newTest.save();
+		return res
+			.status(201)
+			.json({ message: 'Test created successfully', data: newTest });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ message: error.message });
+	}
+};
 
 const getTests = asyncHandler(async (req, res) => {
 	const { page = 1, limit = 10, categoryId, userId } = req.query;
 	const filter = {};
 	if (categoryId) filter.categoryId = categoryId;
-	if (userId) filter.userId = userId;
+	if (userId) filter.createdBy = userId;
 
 	const tests = await TestModel.find(filter)
 		.skip((page - 1) * limit)

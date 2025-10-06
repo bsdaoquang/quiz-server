@@ -53,7 +53,7 @@ const getQuestions = asyncHandle(async (req, res) => {
 
 	// categories is array
 	if (category) {
-		query.category = { $in: category };
+		query.categories = { $in: category };
 	}
 
 	if (createdBy) {

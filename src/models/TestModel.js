@@ -25,6 +25,8 @@ const testSchema = new Schema(
 	{
 		title: { type: String, required: true },
 		description: { type: String },
+		slug: { type: String },
+		categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
 		questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
 		createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 	},
